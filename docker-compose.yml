@@ -1,0 +1,33 @@
+services:
+  mysql:
+    image: mysql:9.5.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql:/data/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - my_network
+    restart: unless-stopped
+  phpmyadmin:
+    image: phpmyadmin:5.2.3
+    environment:
+      ADMIN_DEFAULT_EMAIL: ${ADMIN_DEFAULT_EMAIL:-phpadmin@phpadmin.org}
+      ADMIN_DEFAULT_PASSWORD: ${ADMIN_DEFAULT_PASSWORD:-admin}
+      PMA_HOST: mysql
+    volumes:
+      - phpmyadmin:/var/lib/phpmyadmin
+    ports:
+      - "8081:80"
+    networks:
+      - my_network
+    restart: unless-stopped
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  mysql:
+  phpmyadmin:

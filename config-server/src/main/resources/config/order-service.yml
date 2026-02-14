@@ -1,0 +1,33 @@
+
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecom-micro-order-service?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      database-platform: org.hibernate.dialect.MySQLDialect
+      ddl-auto: update
+    show-sql: true
+
+
+management:
+  endpoint:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  port: 8083
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: "http://localhost:8761/eureka/"

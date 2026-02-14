@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: user-service
+
+  config:
+    import: optional:configserver:http://localhost:8888
+
+#  data:
+#    mongodb:
+#      auto-index-creation: true
+#  mongodb:
+#    uri: mongodb+srv://abhi8287:abhi8287@ecom-user.mcriowr.mongodb.net/ecom_user_db?retryWrites=true&w=majority&appName=ecom-user
+#    database: ecom_user_db
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#
+#server:
+#  port: 8081
+#
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: "http://localhost:8761/eureka/"
+
+

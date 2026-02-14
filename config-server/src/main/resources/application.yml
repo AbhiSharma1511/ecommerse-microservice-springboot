@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: config-server
+
+  profiles:
+    active: native
+
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config
+
+server:
+  port: 8888
+
+
+build:
+  id: 101
+  version: "Default - build"
+  name: "Default build"
+
+
+# listing config server on eureka server is wrong
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: "http://localhost:8761/eureka/"
