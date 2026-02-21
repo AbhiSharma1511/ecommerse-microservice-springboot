@@ -7,6 +7,7 @@ import com.ecommece.order.dto.ProductResponse;
 import com.ecommece.order.dto.UserResponse;
 import com.ecommece.order.models.CartItem;
 import com.ecommece.order.repository.CartItemRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class CartService {
     private final ProductServiceClient productServiceClient;
     private final UserServiceClient userServiceClient;
 
+    @CircuitBreaker(name = "productService")
     public boolean addToCart(String userId, CartItemRequest cartRequest) {
         try{
             // look for the product

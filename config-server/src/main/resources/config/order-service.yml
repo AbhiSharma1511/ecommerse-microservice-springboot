@@ -17,10 +17,19 @@ spring:
 
 
 management:
-  endpoint:
+  endpoints:
     web:
       exposure:
-        include: '*'
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
 
 server:
   port: 8083
@@ -31,3 +40,25 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: "http://localhost:8761/eureka/"
+
+# circuit breaker configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      productService:
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        eventConsumerBufferSize: 10
+
+  timelimiter:
+    instances:
+      productService:
+        timeoutDuration: 3s
+
+

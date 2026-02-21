@@ -5,14 +5,19 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 public class GatewayConfig {
 
-    @Bean
+    // b@Bean
     public RouteLocator setAllTheRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("user-service", r -> r
-                        .path("/api/users/**")
+//                        .path("/api/users/**")
+//                        .uri("lb://USER-SERVICE")
+                        .path("/users/**")
+                        // we can re write the path like doesn't want to expose to the outside world
+                        .filters(f -> f.rewritePath("/users(?<segment>/?.*)",
+                                "/api/users${segment}"))
                         .uri("lb://USER-SERVICE"))
                 .route("product-service", r -> r
                         .path("/api/products/**")
