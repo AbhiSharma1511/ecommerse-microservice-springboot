@@ -10,11 +10,14 @@ import com.ecommece.order.models.OrderStatus;
 import com.ecommece.order.repository.OrderRepository;
 import com.ecommece.order.utils.OrderUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,8 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final UserServiceClient userServiceClient;
+
+    private final RabbitTemplate rabbitTemplate;
 
     public Optional<OrderResponse> createOrder(String userId) {
 
@@ -61,6 +66,23 @@ public class OrderService {
 
         // clear the cart
         cartService.clearCart(userId);
+
+        rabbitTemplate.convertAndSend("order.exchange",
+                "order.tracking",
+                Map.of(
+                        "oderId", savedOrder.getOrderId(),
+                        "status", "CREATED"
+                ));
+
         return Optional.of(OrderUtils.mapToOrderResponse(savedOrder));
+    }
+
+    public Optional<List<OrderResponse>> getAllOrders() {
+
+        List<OrderResponse> ordersResponse = orderRepository.findAll()
+                .stream().map(OrderUtils::mapToOrderResponse)
+                .toList();
+
+        return Optional.of(ordersResponse);
     }
 }
